@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Otari status{% endblock %}
+{% block content %}
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>Otari features in Mollet</h1>
+      <p>Eight Otari features, each one changing what a student sees. Live checks run against <span class="mono">{{ settings.otari_base_url }}</span> with the server's service key.</p>
+    </div>
+    <button class="btn" id="refresh" type="button">Re-check</button>
+  </div>
+  <div class="features" id="features"><div class="feature"><div class="skeleton"></div><div class="skeleton"></div></div></div>
+</main>
+{% endblock %}
+{% block scripts %}<script>Mollet.status();</script>{% endblock %}

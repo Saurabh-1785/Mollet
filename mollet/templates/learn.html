@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ problem.title }}{% endblock %}
+{% block topbar_right %}
+<label for="student-switch" class="hint-text">Student</label>
+<select id="student-switch" aria-label="Switch student">
+  {% for s in students %}
+  <option value="{{ s.id }}" {% if s.id == student.id %}selected{% endif %}>{{ s.name }} · {{ s.id }}</option>
+  {% endfor %}
+</select>
+{% endblock %}
+{% block content %}
+<main class="learn">
+  <nav class="rail" aria-label="Problems">
+    <h2>Problems</h2>
+    {% for p in problems %}
+    <a href="/learn/{{ student.id }}/{{ p.id }}" {% if p.id == problem.id %}aria-current="page"{% endif %}>
+      <span class="tick {% if p.id in solved %}done{% endif %}" aria-label="{% if p.id in solved %}Solved{% else %}Not solved{% endif %}"></span>
+      <span class="p-title">{{ p.title }}</span>
+      <span class="p-meta">{{ p.difficulty }}</span>
+    </a>
+    {% endfor %}
+    <div class="rail-foot">
+      Independence score
+      <strong id="independence">–</strong>
+      <span id="independence-sub">Solve a problem to get one</span>
+    </div>
+  </nav>
+
+  <section class="work" aria-labelledby="problem-title">
+    <div>
+      <div class="problem-head">
+        <h1 id="problem-title">{{ problem.title }}</h1>
+        <span class="chip">{{ problem.difficulty }}</span>
+        <span class="chip chip-success" id="solved-chip" {% if problem.id not in solved %}hidden{% endif %}>Solved</span>
+      </div>
+      <p class="statement" id="statement"></p>
+      <div class="example">Example: {{ problem.example }}</div>
+    </div>
+
+    <div class="editor-wrap">
+      <div class="editor-bar"><span>student.py</span><span>Python 3 · Tab inserts 4 spaces</span></div>
+      <label for="code" class="sr-only">Your code</label>
+      <textarea id="code" class="editor" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="submit" type="button">Run hidden tests</button>
+      <span class="muted">Runs in Otari's code-execution sandbox. Checking is free; it never spends your wallet.</span>
+    </div>
+
+    <div class="panel results" id="results" aria-live="polite"></div>
+  </section>
+
+  <aside class="side" aria-label="Hint wallet">
+    <div class="side-section">
+      <div class="eyebrow"><span>{{ student.name }}'s wallet</span><span id="wallet-source"></span></div>
+      <div class="wallet-top">
+        <div class="wallet-amt" id="wallet-amt">–</div>
+        <div class="hint-text" id="wallet-refill"></div>
+      </div>
+      <div class="meter" id="wallet-meter" role="meter" aria-label="Wallet used" aria-valuemin="0" aria-valuemax="100"><span style="width:0"></span></div>
+      <div class="wallet-meta"><span id="wallet-spent"></span><span id="wallet-limit"></span></div>
+    </div>
+
+    <div class="side-section">
+      <div class="eyebrow"><span>Hint ladder</span><span>price = real token cost</span></div>
+      <ol class="ladder" id="ladder"></ol>
+    </div>
+
+    <div class="side-section">
+      <form class="ask" id="ask-form">
+        <label class="field" for="question">What are you stuck on?
+          <span class="hint-text">Optional. Mollet sends your current code with it.</span>
+        </label>
+        <textarea id="question" maxlength="2000" placeholder="e.g. my count is always 0"></textarea>
+        <button class="btn btn-primary" id="ask" type="submit">Get hint</button>
+        <div id="ask-status" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="hints" id="hints" aria-live="polite"></div>
+  </aside>
+</main>
+<script type="application/json" id="state">{{ state | tojson }}</script>
+{% endblock %}
+{% block scripts %}<script>Mollet.learn();</script>{% endblock %}

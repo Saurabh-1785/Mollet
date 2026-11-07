@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Teacher{% endblock %}
+{% block content %}
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>Class overview</h1>
+      <p>Wallets are Otari end-user budgets; the class cap is the workspace budget. Independence rewards solving with few, low hints.</p>
+    </div>
+    <button class="btn" id="refresh" type="button">Refresh</button>
+  </div>
+
+  <section class="stats" aria-label="Class totals">
+    <div class="stat"><div class="label">Class budget used</div><div class="value" id="c-used">–</div><div class="sub" id="c-sub"></div>
+      <div class="meter" id="c-meter" style="margin-bottom:0"><span style="width:0"></span></div></div>
+    <div class="stat"><div class="label">Hints bought</div><div class="value" id="c-hints">–</div><div class="sub" id="c-hint-cost"></div></div>
+    <div class="stat"><div class="label">Problems solved</div><div class="value" id="c-solved">–</div><div class="sub" id="c-solved-sub"></div></div>
+    <div class="stat"><div class="label">Class independence</div><div class="value" id="c-ind">–</div><div class="sub">100 = no hints needed</div></div>
+  </section>
+
+  <h2 class="section-title">Students <span>live from Otari /end-users</span></h2>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Student</th><th>Wallet (Otari end-user budget)</th><th class="num">Hints</th><th class="num">Solved</th><th class="num">Independence</th><th></th></tr></thead>
+      <tbody id="students"><tr><td colspan="6"><div class="skeleton"></div><div class="skeleton"></div></td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <section>
+      <h2 class="section-title">Refusals <span>budget and guardrail blocks</span></h2>
+      <div class="list" id="refusals"><div class="list-row empty">Nothing blocked yet.</div></div>
+    </section>
+    <section>
+      <h2 class="section-title">Models that answered <span>from Otari-Model</span></h2>
+      <div class="list" id="models"><div class="list-row empty">No hints yet.</div></div>
+      <h2 class="section-title" style="margin-top:var(--s-5)">Hints by rung</h2>
+      <div class="list"><div class="ladder-bars" id="rungs"></div></div>
+    </section>
+  </div>
+</main>
+{% endblock %}
+{% block scripts %}<script>Mollet.teacher();</script>{% endblock %}
