@@ -1,0 +1,23 @@
+# One-click deploy on Render (free plan). The MCP server is served by the same
+# app at https://<service>.onrender.com/classroom/mcp, which Otari can reach.
+services:
+  - type: web
+    name: mollet
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: OTARI_API_KEY
+        sync: false
+      - key: MOLLET_MCP_TOKEN
+        generateValue: true
+      - key: MOLLET_MCP_SERVER_ID
+        sync: false
+      - key: MOLLET_HINTER_MODEL
+        value: mollet-hinter
+      - key: MOLLET_MENTOR_MODEL
+        value: mollet-mentor
+      - key: MOLLET_GRADER_MODEL
+        value: mollet-grader
+      - key: MOLLET_GUARDRAILS
+        sync: false
