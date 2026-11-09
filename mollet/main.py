@@ -65,6 +65,9 @@ def refusal(e: OtariError, student_id: str) -> dict[str, Any]:
                "or address. Mollet never needs it. Remove it and ask again.")
     elif e.code == "user_blocked":
         kind, title, msg = "blocked", "Hints paused", "Your teacher has paused hints for your account."
+    elif e.code == "insufficient_funds" or e.status == 402:
+        kind, title = "setup", "Otari account out of credit"
+        msg = "The Otari organization has no credit left, so no model can answer. Add credit in Otari's Billing page."
     elif e.status == 401:
         kind, title = "setup", "Mollet isn't connected to Otari"
         msg = "The Otari key is missing or invalid. Set OTARI_API_KEY to a service key and restart."
