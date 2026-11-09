@@ -223,6 +223,21 @@ async def test_hint_survives_disabled_web_search():
 
 
 @pytest.mark.anyio
+async def test_guardrail_code_nested_in_detail():
+    """Live Otari shape: no Otari-Error-Code header, code inside `detail`."""
+    def handler(request):
+        return httpx.Response(403, json={"detail": {"message": "Request blocked by guardrail policy.",
+                                                    "code": "guardrail_violation",
+                                                    "guardrails": [{"profile": "mollet-pii", "score": 0.9}]}})
+
+    o = Otari(transport=httpx.MockTransport(handler))
+    with pytest.raises(OtariError) as ei:
+        await o.chat(model="m", messages=[{"role": "user", "content": "hi"}])
+    await o.aclose()
+    assert ei.value.is_guardrail and ei.value.detail == "Request blocked by guardrail policy."
+
+
+@pytest.mark.anyio
 async def test_budget_refusal_is_never_retried_around():
     p = problems.get("fizzbuzz")
     n = []

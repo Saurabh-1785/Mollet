@@ -126,7 +126,11 @@ def _raise_for(resp: httpx.Response) -> None:
         body: Any = resp.json()
     except ValueError:
         body = resp.text
-    code = resp.headers.get("Otari-Error-Code") or (body.get("code") if isinstance(body, dict) else None)
+    code = resp.headers.get("Otari-Error-Code")
+    if not code and isinstance(body, dict):
+        # Seen live: {"detail": {"message": ..., "code": "guardrail_violation", "guardrails": [...]}}
+        detail = body.get("detail")
+        code = body.get("code") or (detail.get("code") if isinstance(detail, dict) else None)
     retry = resp.headers.get("Retry-After")
     raise OtariError(
         resp.status_code,
