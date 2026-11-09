@@ -41,7 +41,7 @@ LADDER: list[Rung] = [
          "Name the ONE Python concept the student needs, in one sentence, and give exactly one "
          "link to the official documentation page for it (docs.python.org preferred). Use the web "
          "search tool once to find that page. No code. No explanation beyond one sentence.",
-         "hinter", 0.0006, 50),
+         "hinter", 0.0110, 50),  # includes one Otari web search (~$0.01)
     Rung(2, "Explain", "Explain the missing concept",
          "Explain the concept the student is missing in plain words. You may show a tiny example "
          "of the concept on a DIFFERENT task (different names, different data). Never code for "

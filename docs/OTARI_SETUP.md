@@ -14,7 +14,7 @@ Write down anything surprising in [FEEDBACK.md](../FEEDBACK.md) as you go.
 
 | Role | Pick | Used for |
 | --- | --- | --- |
-| Hinter A + Hinter B | two small, cheap chat models (e.g. a Llama or Gemma and a Mistral) | rungs 1–3, as a fallback chain |
+| Hinter A + Hinter B | two cheap chat models **that support tool calling** (tested: `alibaba/qwen3-30b-a3b-instruct-2507` and `mistralai/mistral-small-latest`) | rungs 1–3, as a fallback chain |
 | Mentor + cheaper tier | a larger chat model (e.g. DeepSeek or Qwen) and one cheaper model | rungs 4–5 |
 | Grader | an open-weight **coding** model (e.g. Qwen Coder or Devstral) | reviewing submissions |
 
@@ -76,3 +76,8 @@ The deployed app and the MCP server share one SQLite file, so `get_student_histo
 ## 9. Final check
 
 Run `python -m scripts.check_otari` (all checks), then open `/status` in the app: all eight features should read **In use** after one pass through the demo.
+
+## Notes from the first live run
+
+- Models without tool calling (e.g. `google/gemma-3-4b-it`, listed without `tools` in `GET /models`) write the tool call as text instead of calling it, so web search and MCP never run. `meta/llama-4-scout-17b-instruct` searched but was rejected with MCP tools. Every model in `mollet-hinter` and `mollet-mentor` must support tools.
+- One `otari_web_search` costs about $0.01, far more than the tokens of a hint, so rung 1 is the priciest rung. A demo wallet of $0.02–0.03 empties after a few hints.
